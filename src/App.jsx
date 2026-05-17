@@ -1,121 +1,190 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
+const STORAGE_KEY = 'ai-notes-vibe-app.notes'
+
+function loadNotes() {
+  try {
+    const savedNotes = JSON.parse(localStorage.getItem(STORAGE_KEY))
+    return Array.isArray(savedNotes) ? savedNotes : []
+  } catch {
+    return []
+  }
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [notes, setNotes] = useState(loadNotes)
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+  const [editingId, setEditingId] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes))
+  }, [notes])
+
+  const filteredNotes = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase()
+
+    if (!query) {
+      return notes
+    }
+
+    return notes.filter((note) =>
+      `${note.title} ${note.body}`.toLowerCase().includes(query),
+    )
+  }, [notes, searchTerm])
+
+  const resetForm = () => {
+    setTitle('')
+    setBody('')
+    setEditingId(null)
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const trimmedTitle = title.trim()
+    const trimmedBody = body.trim()
+
+    if (!trimmedTitle || !trimmedBody) {
+      return
+    }
+
+    if (editingId) {
+      setNotes((currentNotes) =>
+        currentNotes.map((note) =>
+          note.id === editingId
+            ? { ...note, title: trimmedTitle, body: trimmedBody }
+            : note,
+        ),
+      )
+    } else {
+      const newNote = {
+        id: crypto.randomUUID(),
+        title: trimmedTitle,
+        body: trimmedBody,
+      }
+
+      setNotes((currentNotes) => [newNote, ...currentNotes])
+    }
+
+    resetForm()
+  }
+
+  const handleEdit = (note) => {
+    setTitle(note.title)
+    setBody(note.body)
+    setEditingId(note.id)
+  }
+
+  const handleDelete = (noteId) => {
+    setNotes((currentNotes) => currentNotes.filter((note) => note.id !== noteId))
+
+    if (editingId === noteId) {
+      resetForm()
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <main className="app-shell">
+      <section className="app-header">
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+          <p className="eyebrow">Local notes</p>
+          <h1>Notes App</h1>
+          <p className="intro">
+            Capture simple notes, edit them later, and keep them saved in your
+            browser.
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
       </section>
 
-      <div className="ticks"></div>
+      <section className="notes-layout">
+        <form className="note-form" onSubmit={handleSubmit}>
+          <h2>{editingId ? 'Edit note' : 'Create a note'}</h2>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
+          <label htmlFor="note-title">Title</label>
+          <input
+            id="note-title"
+            type="text"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="Meeting ideas"
+          />
+
+          <label htmlFor="note-body">Body</label>
+          <textarea
+            id="note-body"
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+            placeholder="Write your note here..."
+            rows="7"
+          />
+
+          <div className="form-actions">
+            <button type="submit">{editingId ? 'Save changes' : 'Add note'}</button>
+            {editingId && (
+              <button type="button" className="secondary-button" onClick={resetForm}>
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+
+        <section className="notes-panel" aria-labelledby="notes-heading">
+          <div className="notes-toolbar">
+            <div>
+              <h2 id="notes-heading">Saved notes</h2>
+              <p>
+                {notes.length === 1
+                  ? '1 note saved'
+                  : `${notes.length} notes saved`}
+              </p>
+            </div>
+            <input
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Search notes"
+              aria-label="Search notes"
+            />
+          </div>
+
+          {notes.length === 0 ? (
+            <div className="empty-state">
+              <h3>No notes yet</h3>
+              <p>Create your first note with a title and body.</p>
+            </div>
+          ) : filteredNotes.length === 0 ? (
+            <div className="empty-state">
+              <h3>No matches found</h3>
+              <p>Try a different search term.</p>
+            </div>
+          ) : (
+            <div className="notes-grid">
+              {filteredNotes.map((note) => (
+                <article className="note-card" key={note.id}>
+                  <h3>{note.title}</h3>
+                  <p>{note.body}</p>
+                  <div className="card-actions">
+                    <button type="button" onClick={() => handleEdit(note)}>
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="danger-button"
+                      onClick={() => handleDelete(note.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </main>
   )
 }
 

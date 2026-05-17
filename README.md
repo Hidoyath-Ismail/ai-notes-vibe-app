@@ -1,16 +1,36 @@
-# React + Vite
+# AI Notes Vibe App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A beginner-friendly notes app built with React and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Create notes with a title and body
+- View saved notes in responsive cards
+- Edit existing notes
+- Delete notes
+- Search notes by title or body
+- Persist notes in browser localStorage
+- Show helpful empty states
 
-## React Compiler
+## Run Locally
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Open the local URL printed by Vite in your browser.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Test the App Manually
+
+1. Create a note with a title and body.
+2. Refresh the browser and confirm the note is still saved.
+3. Edit the note and save changes.
+4. Search for text from the note title or body.
+5. Delete the note and confirm the empty state appears.
+
+## Available Scripts
+
+- `npm run dev` starts the local development server.
+- `npm run build` creates a production build.
+- `npm run lint` checks the code with ESLint.
