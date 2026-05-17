@@ -158,7 +158,7 @@ function App() {
           ) : filteredNotes.length === 0 ? (
             <div className="empty-state">
               <h3>No matches found</h3>
-              <p>Try a different search term.</p>
+              <p>No notes match "{searchTerm.trim()}". Try a different search.</p>
             </div>
           ) : (
             <div className="notes-grid">
