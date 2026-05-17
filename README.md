@@ -1,37 +1,143 @@
 # AI Notes Vibe App
 
-A beginner-friendly notes app built with React and Vite.
+## Project Overview
+
+AI Notes Vibe App is a beginner-friendly notes application built with React and Vite. Users can create, edit, delete, search, and persist notes in the browser with `localStorage`.
+
+This project is intended as a portfolio example of building a small frontend application with clean UI, focused features, automated tests, and an AI-assisted development workflow.
+
+## Why I Built This
+
+I built this project to practice controlled frontend feature development in a realistic but approachable app. A notes app is small enough to keep the architecture simple, but it still includes common product concerns such as form state, persistent data, search, empty states, accessibility, and test coverage.
+
+## AI-Assisted Development Workflow
+
+Codex was used as an AI coding assistant for feature generation, code review, and testing support. The workflow emphasized human review at each step:
+
+- Read project instructions before making changes
+- Make focused feature updates instead of large rewrites
+- Review proposed changes before accepting them
+- Use Git checkpoints to keep work traceable
+- Add automated tests for important user flows
+- Run linting, tests, and builds before considering work complete
 
 ## Features
 
 - Create notes with a title and body
-- View saved notes in responsive cards
+- View saved notes in responsive note cards
 - Edit existing notes
 - Delete notes
 - Search notes by title or body
-- Persist notes in browser localStorage
-- Show helpful empty states
+- Show a helpful message when no notes match a search
+- Persist notes in browser `localStorage`
+- Show an empty state when no notes exist
+- Support light and dark system color preferences
 
-## Run Locally
+## Tech Stack
+
+- React
+- Vite
+- CSS
+- Browser `localStorage`
+- Vitest
+- React Testing Library
+- ESLint
+
+## Testing and Quality Practices
+
+This project includes automated tests for the core notes workflow:
+
+- Empty state rendering
+- Creating notes
+- Editing notes
+- Deleting notes
+- Searching by title or body
+- No-match search messaging
+- Loading saved notes from `localStorage`
+
+Quality practices used in this project:
+
+- Beginner-friendly component logic
+- Simple local React state management
+- No backend service
+- No unnecessary runtime dependencies
+- Automated tests with user-focused interactions
+- Lint checks with ESLint
+- Production build verification with Vite
+- Manual review of create, edit, delete, search, and persistence behavior
+
+## How to Run Locally
+
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
 Open the local URL printed by Vite in your browser.
 
-## Test the App Manually
+## How to Run Tests
 
-1. Create a note with a title and body.
-2. Refresh the browser and confirm the note is still saved.
-3. Edit the note and save changes.
-4. Search for text from the note title or body.
-5. Delete the note and confirm the empty state appears.
+Run the automated test suite:
 
-## Available Scripts
+```bash
+npm test
+```
 
-- `npm run dev` starts the local development server.
-- `npm run build` creates a production build.
-- `npm run lint` checks the code with ESLint.
-- `npm test` runs the automated test suite.
+Run lint checks:
+
+```bash
+npm run lint
+```
+
+Run a production build:
+
+```bash
+npm run build
+```
+
+## Screenshots
+
+Add screenshots before sharing this project in a portfolio.
+
+### Empty State
+
+Placeholder: screenshot of the app before any notes are created.
+
+### Notes List
+
+Placeholder: screenshot showing multiple saved notes in the card layout.
+
+### Search Results
+
+Placeholder: screenshot showing filtered notes or the no-match message.
+
+## Key Learnings
+
+- How to manage form state with React hooks
+- How to persist simple frontend data with `localStorage`
+- How to keep feature work small and reviewable
+- How to write tests around user behavior instead of implementation details
+- How to use AI assistance while still relying on human review and verification
+
+## Future Improvements
+
+- Split the app into smaller components such as `NoteForm`, `NoteCard`, and `NotesList`
+- Add simple form validation messages for empty title or body fields
+- Add a delete confirmation for accidental deletions
+- Add note timestamps or sorting options
+- Add screenshot assets to complete the portfolio presentation
+
+## Interview Talking Points
+
+- I used React state to manage notes, form values, edit mode, and search text.
+- I used `localStorage` so notes persist without adding a backend.
+- I added automated tests with Vitest and React Testing Library for the most important user flows.
+- I used Codex as an AI coding assistant, but kept the workflow review-driven with human decisions, Git checkpoints, and test verification.
+- I kept the scope intentionally small so the app stays readable, maintainable, and easy to explain.
