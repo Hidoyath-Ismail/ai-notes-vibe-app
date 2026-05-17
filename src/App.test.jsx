@@ -35,6 +35,38 @@ describe('Notes App', () => {
     expect(screen.getByText('1 note saved')).toBeInTheDocument()
   })
 
+  it('lets a user edit an existing note', async () => {
+    render(<App />)
+    const user = await createNote('Draft title', 'Draft body')
+
+    await user.click(screen.getByRole('button', { name: /edit/i }))
+    await user.clear(screen.getByLabelText(/title/i))
+    await user.type(screen.getByLabelText(/title/i), 'Updated title')
+    await user.clear(screen.getByLabelText(/body/i))
+    await user.type(screen.getByLabelText(/body/i), 'Updated body')
+    await user.click(screen.getByRole('button', { name: /save changes/i }))
+
+    expect(screen.getByRole('heading', { name: 'Updated title' })).toBeInTheDocument()
+    expect(screen.getByText('Updated body')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: 'Draft title' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText('Draft body')).not.toBeInTheDocument()
+  })
+
+  it('lets a user delete an existing note', async () => {
+    render(<App />)
+    const user = await createNote('Temporary note', 'This note will be removed.')
+
+    await user.click(screen.getByRole('button', { name: /delete/i }))
+
+    expect(
+      screen.queryByRole('heading', { name: 'Temporary note' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText('This note will be removed.')).not.toBeInTheDocument()
+    expect(screen.getByText(/no notes yet/i)).toBeInTheDocument()
+  })
+
   it('searches notes by title or body without matching case', async () => {
     render(<App />)
     const user = await createNote('Grocery List', 'Buy apples and coffee.')
