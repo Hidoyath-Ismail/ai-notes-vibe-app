@@ -104,19 +104,9 @@ npm run build
 
 ## Screenshots
 
-Add screenshots before sharing this project in a portfolio.
+### Notes App
 
-### Empty State
-
-Placeholder: screenshot of the app before any notes are created.
-
-### Notes List
-
-Placeholder: screenshot showing multiple saved notes in the card layout.
-
-### Search Results
-
-Placeholder: screenshot showing filtered notes or the no-match message.
+![Codex-Assisted Notes App Screenshot](screenshots/codex-assisted-notes-app-thumbnail1.png)
 
 ## Key Learnings
 
